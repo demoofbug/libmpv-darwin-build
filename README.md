@@ -305,10 +305,9 @@ Rules:
     LGPL builds. The flavor code is kept for upstream alignment; note that
     fftools-ffi does not compile against the ffmpeg 9 API, so the flavor
     needs a port before it can be re-enabled.
-- Packaging: `mk-out-libs` now bundles libass with its font stack (freetype,
-  harfbuzz, fribidi, libpng) in the audio variant too. libplacebo is linked
-  statically into libmpv (meson default) and does not ship as a separate
-  dylib/framework.
+- Packaging: `mk-out-libs` now bundles libplacebo in all variants (it builds
+  as a shared library that libmpv links dynamically), and libass with its
+  font stack (freetype, harfbuzz, fribidi, libpng) in the audio variant too.
 
 ## Minimum versions
 
