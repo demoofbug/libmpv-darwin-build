@@ -34,9 +34,13 @@ pkgs.stdenvNoCC.mkDerivation {
     pkgs.pkg-config
     # glsl_preproc (run over renderer.c/shaders.c) imports jinja2, and the
     # glad2 generator produces the GL headers at configure time; the
-    # corresponding 3rdparty/ submodules are empty in the release tarball,
-    # so provide them through the interpreter instead (same as nixpkgs).
-    (pkgs.python3.withPackages (ps: with ps; [ jinja2 markupsafe glad2 ]))
+    # corresponding 3rdparty/ submodules are empty in the release tarball.
+    # Listed as flat python3Packages (not withPackages) so their setup hooks
+    # export site-packages via PYTHONPATH: meson resolves find_installation()
+    # to the bare interpreter of the first python3 on PATH, which cannot see
+    # packages wrapped inside a python3.withPackages env.
+    pkgs.python3Packages.jinja2
+    pkgs.python3Packages.glad2
   ];
   buildInputs = [
     vulkanHeaders
