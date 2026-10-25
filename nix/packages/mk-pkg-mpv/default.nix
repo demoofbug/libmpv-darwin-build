@@ -23,6 +23,7 @@ let
   nativeFile = callPackage ../../utils/native-file/default.nix { };
   crossFile = callPackage ../../utils/cross-file/default.nix { };
   xctoolchainLipo = callPackage ../../utils/xctoolchain/lipo.nix { };
+  xctoolchainXcrun = callPackage ../../utils/xctoolchain/xcrun.nix { };
   ffmpeg = callPackage ../mk-pkg-ffmpeg/default.nix { };
   uchardet = callPackage ../mk-pkg-uchardet/default.nix { };
   libass = callPackage ../mk-pkg-libass/default.nix { };
@@ -35,6 +36,7 @@ let
     pkgs.pkg-config
     pkgs.python3
     xctoolchainLipo
+    xctoolchainXcrun
   ];
 
   pname = import ../../utils/name/package.nix name;
@@ -72,6 +74,13 @@ pkgs.stdenvNoCC.mkDerivation {
     [ ffmpeg libass libplacebo vulkanHeaders ]
     ++ pkgs.lib.optionals (variant == "video") [ uchardet ];
   configurePhase = ''
+    # mpv detects the macOS SDK via TOOLS/macos-sdk-version.py, which prefers
+    # these env vars over calling xcrun, and only registers swift (required
+    # by cocoa) when the detection reports >= 10.15. The cross-file sysroot
+    # always takes precedence for actual compilation.
+    export MACOS_SDK=${pkgs.darwin.xcode}/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+    export MACOS_SDK_VERSION=15.0
+
     DISABLE_ALL_OPTIONS=(
       `# booleans`
       -Dgpl=false `# GPL (version 2 or later) build`
@@ -173,8 +182,9 @@ pkgs.stdenvNoCC.mkDerivation {
       -Dmacos-cocoa-cb=disabled `# macOS libmpv backend`
       -Dmacos-media-player=disabled `# macOS Media Player support`
       -Dmacos-touchbar=disabled `# macOS Touch Bar support`
-      -Dswift-build=disabled `# macOS Swift build tools`
-      -Dswift-flags= `# Optional Swift compiler flags`
+      `# NOTE: swift-build stays auto: with cocoa enabled it is required,`
+      `# since player/clipboard/clipboard-mac.m includes the swift-generated`
+      `# osdep/mac/swift.h. It is auto-disabled for iOS targets (no cocoa).`
 
       `# manpages`
       -Dhtml-build=disabled `# html manual generation`
@@ -207,6 +217,15 @@ pkgs.stdenvNoCC.mkDerivation {
 
       `# video output features`
       -Dcocoa=enabled `# Cocoa` `# BUG: required in audio mode since v0.36.0`
+
+      `# swift`
+      `# writable module cache dir for swiftc (HOME is not writable in the`
+      `# sandbox); swiftc has no -mmacosx-version-min flag, so the deployment`
+      `# target is set via an explicit -target triple (10.15 is the oldest`
+      `# target swift supports, matching mpv's own swift requirement)`
+      '-Dswift-flags=-module-cache-path ./cache -target ${
+        if arch == "amd64" then "x86_64-apple-macos10.15" else "arm64-apple-macos10.15"
+      }'
     )
 
     MACOS_VIDEO_OPTIONS=(
