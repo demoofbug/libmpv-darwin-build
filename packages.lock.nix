@@ -45,14 +45,14 @@
     sha256 = "937aa5eeea596798b3274d362de2e3bd32bc537a66d149dd85043349c74dffb6";
   };
   libpng = {
-    version = "1.6.40";
-    url = "https://github.com/pnggroup/libpng/archive/v1.6.40.tar.gz";
-    sha256 = "62d25af25e636454b005c93cae51ddcd5383c40fa14aa3dae8f6576feb5692c2";
+    version = "1.6.59";
+    url = "https://github.com/pnggroup/libpng/archive/v1.6.59.tar.gz";
+    sha256 = "2540302a1844ad2b2b501977abecfa850f265f97b78f065a712ab4074a89f5b5";
   };
   libpngPatch = {
-    version = "1.6.40-1";
-    url = "https://wrapdb.mesonbuild.com/v2/libpng_1.6.40-1/get_patch";
-    sha256 = "bad558070e0a82faa5c0ae553bcd12d49021fc4b628f232a8e58c3fbd281aae1";
+    version = "1.6.59-1";
+    url = "https://wrapdb.mesonbuild.com/v2/libpng_1.6.59-1/get_patch";
+    sha256 = "d20d5e20516a550817026b0074c4051ff4342da43f0600827316ea85f89d1d38";
   };
   libvorbis = {
     version = "1.3.7";
@@ -70,14 +70,14 @@
     sha256 = "164688b63f11a6e4f6d945057fc5c57d5eefb97973d0029fb0303744e10839ff";
   };
   libxml2 = {
-    version = "2.11.5";
-    url = "https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.5.tar.xz";
-    sha256 = "3727b078c360ec69fa869de14bd6f75d7ee8d36987b071e6928d4720a28df3a6";
+    version = "2.15.4";
+    url = "https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.4.tar.xz";
+    sha256 = "98087fd181d9070724f3fbc65c7377db03038eb92bd882374daff44940138821";
   };
   mbedtls = {
-    version = "3.4.1";
-    url = "https://github.com/Mbed-TLS/mbedtls/archive/refs/tags/v3.4.1.tar.gz";
-    sha256 = "a420fcf7103e54e775c383e3751729b8fb2dcd087f6165befd13f28315f754f5";
+    version = "3.6.3.1";
+    url = "https://github.com/Mbed-TLS/mbedtls/releases/download/v3.6.3.1/mbedtls-3.6.3.1.tar.bz2";
+    sha256 = "243ed496d5f88a5b3791021be2800aac821b9a4cc16e7134aa413c58b4c20e0c";
   };
   mpv = {
     version = "0.41.0";

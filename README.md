@@ -256,6 +256,10 @@ Rules:
 
 ### Unreleased
 
+- Upgraded the TLS/parser/graphics stack: **mbedtls** `3.4.1` → `3.6.3.1`
+  (3.6 LTS; source switched to the official release asset, checksum
+  re-verified against the published one), **libxml2** `2.11.5` → `2.15.4`
+  and **libpng** `1.6.40` → `1.6.59` (+ matching wrapdb meson wrap).
 - Upgraded the subtitle/font/codec stack to current Homebrew pairings:
   **libass** `0.17.1` → `0.17.5` (crash fixes since `0.17.2`),
   **harfbuzz** `8.1.1` → `15.0.0` (source switched to the release tarball),
