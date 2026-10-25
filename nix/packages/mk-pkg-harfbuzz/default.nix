@@ -63,6 +63,12 @@ pkgs.stdenvNoCC.mkDerivation {
       -Dicu_builtin=false \
       -Dexperimental_api=false \
       -Dragel_subproject=false \
+      `# harfbuzz >= 15 defaults these extra libs/tools to enabled; only`
+      `# core shaping (+subset, matching pre-15 bundles) is needed here`
+      -Draster=disabled \
+      -Dvector=disabled \
+      -Dgpu=disabled \
+      -Dutilities=disabled \
       -Dfuzzer_ldflags=
   '';
   buildPhase = ''

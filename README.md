@@ -256,6 +256,13 @@ Rules:
 
 ### Unreleased
 
+- Upgraded the subtitle/font/codec stack to current Homebrew pairings:
+  **libass** `0.17.1` → `0.17.5` (crash fixes since `0.17.2`),
+  **harfbuzz** `8.1.1` → `15.0.0` (source switched to the release tarball),
+  **freetype** `2.13.2` → `2.15.0`, **fribidi** `1.0.13` → `1.0.17`,
+  **dav1d** `1.2.1` → `1.5.4`. harfbuzz's new default-on extra libraries
+  (`raster`/`vector`/`gpu`/`utilities`) are disabled — only core shaping
+  (plus `subset`, as before) is needed.
 - Restored `mpv-remove-libass.patch` for the **audio** variant, rewritten
   against `0.41.0` (the mpv `0.36`-era patch no longer applied): libass and
   its font stack (freetype, harfbuzz, fribidi, libpng) are no longer linked
