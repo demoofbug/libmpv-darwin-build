@@ -4,5 +4,4 @@ in
 [
   flavors.default
   flavors.full
-  flavors.encodersgpl
 ]

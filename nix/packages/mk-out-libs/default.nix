@@ -36,6 +36,7 @@ if arch != archs.universal then
 
     mpv = callPackage ../mk-pkg-mpv/default.nix { };
     ffmpeg = callPackage ../mk-pkg-ffmpeg/default.nix { };
+    libplacebo = callPackage ../mk-pkg-libplacebo/default.nix { };
     mbedtls = callPackage ../mk-pkg-mbedtls/default.nix { };
     fftoolsFfi = callPackage ../mk-pkg-fftools-ffi/default.nix { };
     libvorbis = callPackage ../mk-pkg-libvorbis/default.nix { };
@@ -55,7 +56,14 @@ if arch != archs.universal then
       [
         mpv
         ffmpeg
+        libplacebo
         mbedtls
+        # mpv >= 0.41 links libass (and its font stack) in the audio variant too
+        libass
+        harfbuzz
+        fribidi
+        freetype
+        libpng
       ]
       ++ pkgs.lib.optionals (flavor == flavors.encodersgpl) [
         fftoolsFfi
@@ -66,11 +74,6 @@ if arch != archs.universal then
         dav1d
         libxml2
         uchardet
-        libass
-        harfbuzz
-        fribidi
-        freetype
-        libpng
       ]
       ++ pkgs.lib.optionals (variant == variants.video && flavor == flavors.encodersgpl) [
         libvpx
