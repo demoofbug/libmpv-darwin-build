@@ -32,16 +32,25 @@ pkgs.stdenvNoCC.mkDerivation {
     pkgs.meson
     pkgs.ninja
     pkgs.pkg-config
-    # glsl_preproc (run over renderer.c/shaders.c) imports jinja2; the
-    # 3rdparty/jinja and 3rdparty/markupsafe submodules are empty in the
-    # release tarball, so provide them through the interpreter instead.
-    (pkgs.python3.withPackages (ps: with ps; [ jinja2 markupsafe ]))
+    # glsl_preproc (run over renderer.c/shaders.c) imports jinja2, and the
+    # glad2 generator produces the GL headers at configure time; the
+    # corresponding 3rdparty/ submodules are empty in the release tarball,
+    # so provide them through the interpreter instead (same as nixpkgs).
+    (pkgs.python3.withPackages (ps: with ps; [ jinja2 markupsafe glad2 ]))
   ];
   buildInputs = [
     vulkanHeaders
   ];
   configurePhase = ''
-    meson setup build $src \
+    # src is a read-only store path; work on a writable copy and restore the
+    # 3rdparty/fast_float layout the release tarball omits (convert.cc needs
+    # <fast_float/fast_float.h>: libc++ has no floating-point from_chars)
+    cp -r $src src
+    chmod -R u+w src
+    mkdir -p src/3rdparty/fast_float/include
+    cp -r ${pkgs.fast-float}/include/fast_float src/3rdparty/fast_float/include/
+
+    meson setup build src \
       --native-file ${nativeFile} \
       --cross-file ${crossFile} \
       --prefix=$out \
