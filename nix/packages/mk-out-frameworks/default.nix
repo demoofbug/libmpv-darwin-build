@@ -9,6 +9,12 @@
 let
   name = "frameworks";
   version = import ../../utils/version/default.nix { inherit pkgs; };
+  # The engine version comes from the lock file (the version actually built);
+  # the build number from the "+N" suffix of the tag ("0" for non-tag builds).
+  engineVersion = (import ../../../packages.lock.nix).mpv.version;
+  buildNumber =
+    let parts = pkgs.lib.splitString "+" version;
+    in if pkgs.lib.length parts > 1 then pkgs.lib.last parts else "0";
   callPackage = pkgs.lib.callPackageWith {
     inherit
       pkgs
@@ -76,6 +82,10 @@ pkgs.stdenvNoCC.mkDerivation {
 
     export MPV_HEADERS_PATH=${mpvHeaders}
     export MPV_MODULE_MAP_PATH=${./common/mpv/module.modulemap}
+
+    export ENGINE_VERSION=${engineVersion}
+    export BUILD_NUMBER=${buildNumber}
+    export FULL_VERSION=${version}
 
     if [ ${os} == ${oses.macos} ]; then
       export INFO_PLIST_PATH=${./macos/Info.plist}
