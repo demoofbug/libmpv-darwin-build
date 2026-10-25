@@ -58,12 +58,6 @@ if arch != archs.universal then
         ffmpeg
         libplacebo
         mbedtls
-        # mpv >= 0.41 links libass (and its font stack) in the audio variant too
-        libass
-        harfbuzz
-        fribidi
-        freetype
-        libpng
       ]
       ++ pkgs.lib.optionals (flavor == flavors.encodersgpl) [
         fftoolsFfi
@@ -71,6 +65,13 @@ if arch != archs.universal then
         libogg
       ]
       ++ pkgs.lib.optionals (variant == variants.video) [
+        # libass + font stack: stripped from the audio variant by
+        # mpv-remove-libass.patch, bundled only where it is linked
+        libass
+        harfbuzz
+        fribidi
+        freetype
+        libpng
         dav1d
         libxml2
         uchardet

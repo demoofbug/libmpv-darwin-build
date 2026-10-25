@@ -54,35 +54,25 @@ $ tree result
 ├── libmpv-libs_v0.41.0+1_macos-universal-video-default.tar.gz
 ├── libmpv-libs_v0.41.0+1_macos-universal-video-full.tar.gz
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default.tar.gz
-├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Ass.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Avcodec.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Avfilter.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Avformat.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Avutil.zip
-├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Freetype.zip
-├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Fribidi.zip
-├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Harfbuzz.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Mbedcrypto.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Mbedtls.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Mbedx509.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Mpv.zip
-├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Png16.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Swresample.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-default_Swscale.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full.tar.gz
-├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Ass.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Avcodec.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Avfilter.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Avformat.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Avutil.zip
-├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Freetype.zip
-├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Fribidi.zip
-├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Harfbuzz.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Mbedcrypto.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Mbedtls.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Mbedx509.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Mpv.zip
-├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Png16.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Swresample.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-audio-full_Swscale.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-video-default.tar.gz
@@ -124,35 +114,25 @@ $ tree result
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-video-full_Uchardet.zip
 ├── libmpv-xcframeworks_v0.41.0+1_ios-universal-video-full_Xml2.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default.tar.gz
-├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Ass.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Avcodec.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Avfilter.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Avformat.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Avutil.zip
-├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Freetype.zip
-├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Fribidi.zip
-├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Harfbuzz.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Mbedcrypto.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Mbedtls.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Mbedx509.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Mpv.zip
-├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Png16.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Swresample.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-default_Swscale.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full.tar.gz
-├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Ass.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Avcodec.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Avfilter.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Avformat.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Avutil.zip
-├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Freetype.zip
-├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Fribidi.zip
-├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Harfbuzz.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Mbedcrypto.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Mbedtls.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Mbedx509.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Mpv.zip
-├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Png16.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Swresample.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-audio-full_Swscale.zip
 ├── libmpv-xcframeworks_v0.41.0+1_macos-universal-video-default.tar.gz
@@ -276,6 +256,15 @@ Rules:
 
 ### Unreleased
 
+- Restored `mpv-remove-libass.patch` for the **audio** variant, rewritten
+  against `0.41.0` (the mpv `0.36`-era patch no longer applied): libass and
+  its font stack (freetype, harfbuzz, fribidi, libpng) are no longer linked
+  or bundled in audio builds. The rewrite also adds `sub/ass_stub.c` —
+  no-op implementations of every libass function — so the link closes
+  without relying on linker tolerance for undefined symbols.
+
+### v0.41.0+1
+
 - Upgraded **mpv** `0.36.0` → `0.41.0`:
   - Added **libplacebo** `7.360.1` — a hard dependency of mpv since `0.37`
     (the GPU render pipeline, including libmpv's `render_gl` API, is built on
@@ -289,9 +278,10 @@ Rules:
     feature options to their new names.
   - Rewrote `mpv-audiounit-shared-session.patch` against `0.41.0` (upstream
     reworked the `AVAudioSession` handling in `ao_audiounit.m`).
-  - Removed `mpv-fix-missing-objc.patch` and `mpv-remove-libass.patch` —
-    neither applies against `0.41.0`; libass is now linked in the audio
-    variant instead of being stripped out.
+  - Removed `mpv-fix-missing-objc.patch` and the `0.36` version of
+    `mpv-remove-libass.patch` — neither applied against `0.41.0`; libass was
+    temporarily linked in the audio variant until the strip patch was
+    rewritten (see Unreleased).
 - Upgraded **ffmpeg** `6.0` → `9.0.2` (mpv `0.41.0` requires
   libavutil ≥ 58.29.100):
   - Removed `ffmpeg-fix-vp9-hwaccel.patch`,
@@ -305,9 +295,9 @@ Rules:
     LGPL builds. The flavor code is kept for upstream alignment; note that
     fftools-ffi does not compile against the ffmpeg 9 API, so the flavor
     needs a port before it can be re-enabled.
-- Packaging: `mk-out-libs` now bundles libplacebo in all variants (it builds
-  as a shared library that libmpv links dynamically), and libass with its
-  font stack (freetype, harfbuzz, fribidi, libpng) in the audio variant too.
+- Packaging: `mk-out-libs` bundles libplacebo in all variants (it builds as
+  a shared library that libmpv links dynamically); libass and its font stack
+  (freetype, harfbuzz, fribidi, libpng) ship with the video variant only.
 
 ## Minimum versions
 
@@ -429,8 +419,8 @@ flowchart LR
 
 - [**libass**](https://github.com/libass/libass): A library for rendering
   subtitles in videos, with support for advanced text formatting and
-  positioning features (linked in all variants since the mpv `0.41.0`
-  upgrade)
+  positioning features (stripped from the audio variant, which never renders
+  subtitles)
 
 - [**libplacebo**](https://github.com/haasn/libplacebo): A video rendering
   and processing library — shader management, color management, tone mapping
