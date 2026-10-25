@@ -4,9 +4,10 @@
 # Example: make XCODE_PATH=/Applications/Xcode_16.1.0.app
 XCODE_PATH ?=
 
-# Version string to build. If not set, falls back to .nix/config/version.txt.
-# Example: make VERSION=0.0.1
-VERSION ?=
+# Version string to build. Direct nix builds (without make) fall back to
+# the committed .nix/config/version.txt.
+# Example: make VERSION=v0.41.0+2
+VERSION ?= v0.41.0+1
 
 # Flake output attribute to build. If not set, the default package is built.
 # Example: make TARGET=mk-out-archive-libs-macos-universal-video-default

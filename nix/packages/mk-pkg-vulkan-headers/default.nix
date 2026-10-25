@@ -1,0 +1,43 @@
+{
+  pkgs ? import ../../utils/default/pkgs.nix,
+  os ? import ../../utils/default/os.nix,
+  arch ? pkgs.callPackage ../../utils/default/arch.nix { },
+}:
+
+let
+  name = "vulkan-headers";
+  packageLock = (import ../../../packages.lock.nix).${name};
+  inherit (packageLock) version;
+
+  callPackage = pkgs.lib.callPackageWith { inherit pkgs os arch; };
+  pname = import ../../utils/name/package.nix name;
+  src = callPackage ../../utils/fetch-tarball/default.nix {
+    name = "${pname}-source-${version}";
+    inherit (packageLock) url sha256;
+  };
+in
+
+pkgs.stdenvNoCC.mkDerivation {
+  name = "${pname}-${os}-${arch}-${version}";
+  pname = pname;
+  inherit version;
+  inherit src;
+  dontUnpack = true;
+  installPhase = ''
+    mkdir -p $out/include/vulkan $out/include/vk_video
+    cp $src/include/vulkan/*.h $out/include/vulkan/
+    # vulkan_core.h includes the video codec extension headers from vk_video/
+    cp $src/include/vk_video/*.h $out/include/vk_video/
+
+    # install pkg-config file so that consumers (e.g. libplacebo) can find
+    # the Vulkan headers via `dependency('vulkan')`. Unquoted heredoc:
+    # $out must expand to the store path at install time.
+    mkdir -p $out/lib/pkgconfig
+    cat > $out/lib/pkgconfig/vulkan.pc <<EOF
+Name: vulkan
+Description: Vulkan Loader and headers
+Version: ${version}
+Cflags: -I$out/include
+EOF
+  '';
+}

@@ -79,6 +79,9 @@ find ${DEPS} -name "*.dylib" -type f | while read DYLIB; do
     cp --no-preserve=mode ${INFO_PLIST_PATH} "${FRAMEWORK_DIR}/Info.plist"
     sed -i 's/${FRAMEWORK_NAME}/'${FRAMEWORK_NAME}'/g' "${FRAMEWORK_DIR}/Info.plist"
     sed -i 's/${MIN_OS_VERSION}/'${MIN_OS_VERSION}'/g' "${FRAMEWORK_DIR}/Info.plist"
+    sed -i 's/${ENGINE_VERSION}/'${ENGINE_VERSION}'/g' "${FRAMEWORK_DIR}/Info.plist"
+    sed -i 's/${BUILD_NUMBER}/'${BUILD_NUMBER}'/g' "${FRAMEWORK_DIR}/Info.plist"
+    sed -i 's/${FULL_VERSION}/'${FULL_VERSION}'/g' "${FRAMEWORK_DIR}/Info.plist"
     plutil -convert binary1 "${FRAMEWORK_DIR}/Info.plist"
 
     # Mpv.framework needs headers and a module map to be importable as a Swift module

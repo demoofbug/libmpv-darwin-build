@@ -5,9 +5,9 @@
     sha256 = "a4003623cdc0109dec3aac8435520aa3fb12c4d69454fa227f2658cdb6dab5fa";
   };
   ffmpeg = {
-    version = "6.0";
-    url = "https://ffmpeg.org/releases/ffmpeg-6.0.tar.xz";
-    sha256 = "57be87c22d9b49c112b6d24bc67d42508660e6b718b3db89c44e47e289137082";
+    version = "9.0.2";
+    url = "https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz";
+    sha256 = "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e";
   };
   fftools-ffi = {
     version = "9b0d4da0";
@@ -38,6 +38,11 @@
     version = "1.3.5";
     url = "https://github.com/xiph/ogg/releases/download/v1.3.5/libogg-1.3.5.tar.gz";
     sha256 = "0eb4b4b9420a0f51db142ba3f9c64b333f826532dc0f48c6410ae51f4799b664";
+  };
+  libplacebo = {
+    version = "7.360.1";
+    url = "https://code.videolan.org/videolan/libplacebo/-/archive/v7.360.1/libplacebo-v7.360.1.tar.bz2";
+    sha256 = "937aa5eeea596798b3274d362de2e3bd32bc537a66d149dd85043349c74dffb6";
   };
   libpng = {
     version = "1.6.40";
@@ -75,13 +80,18 @@
     sha256 = "a420fcf7103e54e775c383e3751729b8fb2dcd087f6165befd13f28315f754f5";
   };
   mpv = {
-    version = "0.36.0";
-    url = "https://github.com/mpv-player/mpv/archive/refs/tags/v0.36.0.tar.gz";
-    sha256 = "29abc44f8ebee013bb2f9fe14d80b30db19b534c679056e4851ceadf5a5e8bf6";
+    version = "0.41.0";
+    url = "https://github.com/mpv-player/mpv/archive/refs/tags/v0.41.0.tar.gz";
+    sha256 = "ee21092a5ee427353392360929dc64645c54479aefdb5babc5cfbb5fad626209";
   };
   uchardet = {
     version = "0.0.8";
     url = "https://www.freedesktop.org/software/uchardet/releases/uchardet-0.0.8.tar.xz";
     sha256 = "e97a60cfc00a1c147a674b097bb1422abd9fa78a2d9ce3f3fdcc2e78a34ac5f0";
+  };
+  vulkan-headers = {
+    version = "1.3.290";
+    url = "https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v1.3.290.tar.gz";
+    sha256 = "f38a653bf93cab7a2a229a53d2d53b1cba9a2819e4c0a7de13c54085bde9bcf5";
   };
 }

@@ -5,11 +5,13 @@
       <key>CFBundleExecutable</key>
       <string>${FRAMEWORK_NAME}</string>
       <key>CFBundleIdentifier</key>
-      <string>com.github.media-kit.${FRAMEWORK_NAME}</string>
+      <string>com.getiox.mediax.${FRAMEWORK_NAME}</string>
       <key>CFBundleShortVersionString</key>
-      <string>1.0</string>
+      <string>${ENGINE_VERSION}</string>
       <key>CFBundleVersion</key>
-      <string>1.0</string>
+      <string>${BUILD_NUMBER}</string>
+      <key>MediaXFullVersion</key>
+      <string>${FULL_VERSION}</string>
       <key>MinimumOSVersion</key>
       <string>${MIN_OS_VERSION}</string>
    </dict>

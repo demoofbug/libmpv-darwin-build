@@ -1,10 +1,13 @@
+diff --git a/audio/out/ao_audiounit.m b/audio/out/ao_audiounit.m
+index f9fe4e7..6f2c3a1 100644
 --- a/audio/out/ao_audiounit.m
 +++ b/audio/out/ao_audiounit.m
-@@ -24,6 +24,8 @@
+@@ -23,7 +23,9 @@
+ #include "common/msg.h"
  #include "ao_coreaudio_utils.h"
  #include "ao_coreaudio_chmap.h"
- 
 +#include <pthread.h>
+ 
 +
  #import <AudioUnit/AudioUnit.h>
  #import <CoreAudio/CoreAudioTypes.h>
@@ -23,12 +26,11 @@
  static OSStatus au_get_ary(AudioUnit unit, AudioUnitPropertyID inID, AudioUnitScope inScope, AudioUnitElement inElement, void **data, UInt32 *outDataSize)
  {
      OSStatus err;
-@@ -81,8 +88,60 @@
-     talloc_free(layout);
-     return new_layout;
+@@ -83,6 +90,61 @@
  }
-+
-+static void acquire_audio_session(struct ao *ao, NSInteger pref_channels)
+ 
+ 
++static void acquire_audio_session(struct ao *ao, bool exclusive, NSInteger pref_channels)
 +{
 +    struct priv *p = ao->priv;
 +    AVAudioSession *instance = AVAudioSession.sharedInstance;
@@ -36,9 +38,11 @@
 +    pthread_mutex_lock(&audiounit_session_lock);
 +
 +    if (audiounit_session_use_count == 0) {
++        AVAudioSessionCategoryOptions options = 0;
++        if (!exclusive)
++            options |= AVAudioSessionCategoryOptionMixWithOthers;
 +        [instance setCategory:AVAudioSessionCategoryPlayback
-+                  withOptions:AVAudioSessionCategoryOptionMixWithOthers
-+                        error:nil];
++                  withOptions:options error:nil];
 +        [instance setMode:AVAudioSessionModeMoviePlayback error:nil];
 +        [instance setActive:YES error:nil];
 +        [instance setPreferredOutputNumberOfChannels:pref_channels error:nil];
@@ -60,12 +64,12 @@
 +        return;
 +
 +    pthread_mutex_lock(&audiounit_session_lock);
- 
++
 +    if (audiounit_session_use_count > 0)
 +        audiounit_session_use_count--;
 +    else
 +        MP_WARN(ao, "audio session reference count underflow\n");
- 
++
 +    p->session_acquired = false;
 +
 +    if (audiounit_session_use_count == 0) {
@@ -84,29 +88,35 @@
  static OSStatus render_cb_lpcm(void *ctx, AudioUnitRenderActionFlags *aflags,
                                const AudioTimeStamp *ts, UInt32 bus,
                                UInt32 frames, AudioBufferList *buffer_list)
-@@ -115,10 +174,8 @@
+@@ -115,15 +177,9 @@
  
      MP_VERBOSE(ao, "max channels: %ld, requested: %d\n", maxChannels, (int)ao->channels.num);
  
--    [instance setCategory:AVAudioSessionCategoryPlayback error:nil];
+-    AVAudioSessionCategoryOptions options = 0;
+-    if (!(ao->init_flags & AO_INIT_EXCLUSIVE)) {
+-        options |= AVAudioSessionCategoryOptionMixWithOthers;
+-    }
++    if (!p->skip_session_management)
++        acquire_audio_session(ao, (ao->init_flags & AO_INIT_EXCLUSIVE) != 0, prefChannels);
+ 
+-    [instance setCategory:AVAudioSessionCategoryPlayback withOptions:options error:nil];
 -    [instance setMode:AVAudioSessionModeMoviePlayback error:nil];
 -    [instance setActive:YES error:nil];
 -    [instance setPreferredOutputNumberOfChannels:prefChannels error:nil];
-+    if (!p->skip_session_management)
-+        acquire_audio_session(ao, prefChannels);
  
      AudioComponentDescription desc = (AudioComponentDescription) {
          .componentType         = kAudioUnitType_Output,
-@@ -201,6 +258,8 @@
+@@ -206,6 +262,9 @@
  coreaudio_error_component:
      AudioComponentInstanceDispose(p->audio_unit);
  coreaudio_error:
 +    if (!p->skip_session_management)
 +        release_audio_session(ao);
++
      talloc_free(layout);
      return false;
  }
-@@ -230,10 +289,8 @@
+@@ -235,10 +294,9 @@
      AudioUnitUninitialize(p->audio_unit);
      AudioComponentInstanceDispose(p->audio_unit);
  
@@ -114,12 +124,13 @@
 -        setActive:NO
 -        withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation
 -        error:nil];
++
 +    if (!p->skip_session_management)
 +        release_audio_session(ao);
  }
  
  static int init(struct ao *ao)
-@@ -257,4 +314,9 @@
+@@ -262,4 +320,9 @@
      .reset          = stop,
      .start          = start,
      .priv_size      = sizeof(struct priv),
