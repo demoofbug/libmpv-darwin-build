@@ -24,8 +24,10 @@ pkgs.stdenvNoCC.mkDerivation {
   inherit src;
   dontUnpack = true;
   installPhase = ''
-    mkdir -p $out/include/vulkan
+    mkdir -p $out/include/vulkan $out/include/vk_video
     cp $src/include/vulkan/*.h $out/include/vulkan/
+    # vulkan_core.h includes the video codec extension headers from vk_video/
+    cp $src/include/vk_video/*.h $out/include/vk_video/
 
     # install pkg-config file so that consumers (e.g. libplacebo) can find
     # the Vulkan headers via `dependency('vulkan')`. Unquoted heredoc:
