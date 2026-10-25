@@ -12,6 +12,7 @@ let
   callPackage = pkgs.lib.callPackageWith { inherit pkgs os arch; };
   nativeFile = callPackage ../../utils/native-file/default.nix { };
   crossFile = callPackage ../../utils/cross-file/default.nix { };
+  xctoolchainAr = callPackage ../../utils/xctoolchain/ar.nix { };
   fribidi = callPackage ../mk-pkg-fribidi/default.nix { };
   harfbuzz = callPackage ../mk-pkg-harfbuzz/default.nix { };
   freetype = callPackage ../mk-pkg-freetype/default.nix { };
@@ -47,6 +48,7 @@ pkgs.stdenvNoCC.mkDerivation {
     pkgs.meson
     pkgs.ninja
     pkgs.pkg-config
+    xctoolchainAr
   ];
   buildInputs = [
     fribidi

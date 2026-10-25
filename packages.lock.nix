@@ -1,8 +1,8 @@
 {
   dav1d = {
-    version = "1.2.1";
-    url = "https://code.videolan.org/videolan/dav1d/-/archive/1.2.1/dav1d-1.2.1.tar.bz2";
-    sha256 = "a4003623cdc0109dec3aac8435520aa3fb12c4d69454fa227f2658cdb6dab5fa";
+    version = "1.5.4";
+    url = "https://code.videolan.org/videolan/dav1d/-/archive/1.5.4/dav1d-1.5.4.tar.bz2";
+    sha256 = "2abfb0c89212e6e4733a54e0ae509ec00a5b845a6360946f918806e14aedb011";
   };
   ffmpeg = {
     version = "9.0.2";
@@ -15,24 +15,24 @@
     sha256 = "mgf3ddt3yjmYBd2D0WeEnhgxKNjrEbjYnDx2t4YCfU8=";
   };
   freetype = {
-    version = "2.13.2";
-    url = "https://downloads.sourceforge.net/project/freetype/freetype2/2.13.2/freetype-2.13.2.tar.xz";
-    sha256 = "12991c4e55c506dd7f9b765933e62fd2be2e06d421505d7950a132e4f1bb484d";
+    version = "2.15.0";
+    url = "https://downloads.sourceforge.net/project/freetype/freetype2/2.15.0/freetype-2.15.0.tar.xz";
+    sha256 = "93cd47eb719c325107f2d3cf087d06299e944c3b48a40b55537302304dea1dd5";
   };
   fribidi = {
-    version = "1.0.13";
-    url = "https://github.com/fribidi/fribidi/releases/download/v1.0.13/fribidi-1.0.13.tar.xz";
-    sha256 = "7fa16c80c81bd622f7b198d31356da139cc318a63fc7761217af4130903f54a2";
+    version = "1.0.17";
+    url = "https://github.com/fribidi/fribidi/releases/download/v1.0.17/fribidi-1.0.17.tar.xz";
+    sha256 = "6949dcde27d41cebad1fd741fcafc36d55a1020d2d872d4a6eb3914caabbada2";
   };
   harfbuzz = {
-    version = "8.1.1";
-    url = "https://github.com/harfbuzz/harfbuzz/archive/8.1.1.tar.gz";
-    sha256 = "b16e6bc0fc7e6a218583f40c7d201771f2e3072f85ef6e9217b36c1dc6b2aa25";
+    version = "15.0.0";
+    url = "https://github.com/harfbuzz/harfbuzz/releases/download/15.0.0/harfbuzz-15.0.0.tar.xz";
+    sha256 = "968536e9abd782f07f7954044c0c4020199fcdd39b41d221ec42d2a3be4a44df";
   };
   libass = {
-    version = "0.17.1";
-    url = "https://github.com/libass/libass/releases/download/0.17.1/libass-0.17.1.tar.xz";
-    sha256 = "f0da0bbfba476c16ae3e1cfd862256d30915911f7abaa1b16ce62ee653192784";
+    version = "0.17.5";
+    url = "https://github.com/libass/libass/releases/download/0.17.5/libass-0.17.5.tar.xz";
+    sha256 = "2dca25c0e0c837ddf00b52011b3f82cac1e4ddd3ad018227806b0c2288864acc";
   };
   libogg = {
     version = "1.3.5";
@@ -45,14 +45,14 @@
     sha256 = "937aa5eeea596798b3274d362de2e3bd32bc537a66d149dd85043349c74dffb6";
   };
   libpng = {
-    version = "1.6.40";
-    url = "https://github.com/pnggroup/libpng/archive/v1.6.40.tar.gz";
-    sha256 = "62d25af25e636454b005c93cae51ddcd5383c40fa14aa3dae8f6576feb5692c2";
+    version = "1.6.59";
+    url = "https://github.com/pnggroup/libpng/archive/v1.6.59.tar.gz";
+    sha256 = "2540302a1844ad2b2b501977abecfa850f265f97b78f065a712ab4074a89f5b5";
   };
   libpngPatch = {
-    version = "1.6.40-1";
-    url = "https://wrapdb.mesonbuild.com/v2/libpng_1.6.40-1/get_patch";
-    sha256 = "bad558070e0a82faa5c0ae553bcd12d49021fc4b628f232a8e58c3fbd281aae1";
+    version = "1.6.59-1";
+    url = "https://wrapdb.mesonbuild.com/v2/libpng_1.6.59-1/get_patch";
+    sha256 = "d20d5e20516a550817026b0074c4051ff4342da43f0600827316ea85f89d1d38";
   };
   libvorbis = {
     version = "1.3.7";
@@ -70,14 +70,14 @@
     sha256 = "164688b63f11a6e4f6d945057fc5c57d5eefb97973d0029fb0303744e10839ff";
   };
   libxml2 = {
-    version = "2.11.5";
-    url = "https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.5.tar.xz";
-    sha256 = "3727b078c360ec69fa869de14bd6f75d7ee8d36987b071e6928d4720a28df3a6";
+    version = "2.15.4";
+    url = "https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.4.tar.xz";
+    sha256 = "98087fd181d9070724f3fbc65c7377db03038eb92bd882374daff44940138821";
   };
   mbedtls = {
-    version = "3.4.1";
-    url = "https://github.com/Mbed-TLS/mbedtls/archive/refs/tags/v3.4.1.tar.gz";
-    sha256 = "a420fcf7103e54e775c383e3751729b8fb2dcd087f6165befd13f28315f754f5";
+    version = "3.6.3.1";
+    url = "https://github.com/Mbed-TLS/mbedtls/releases/download/v3.6.3.1/mbedtls-3.6.3.1.tar.bz2";
+    sha256 = "243ed496d5f88a5b3791021be2800aac821b9a4cc16e7134aa413c58b4c20e0c";
   };
   mpv = {
     version = "0.41.0";

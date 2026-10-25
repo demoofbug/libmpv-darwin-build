@@ -40,6 +40,8 @@ pkgs.stdenvNoCC.mkDerivation {
   dontUnpack = true;
   enableParallelBuilding = true;
   inherit nativeBuildInputs;
+  # harfbuzz >= 15 defaults raster/vector/gpu/utilities to enabled; only core
+  # shaping (+subset, matching pre-15 bundles) is needed here
   configurePhase = ''
     meson setup build $src \
       --native-file ${nativeFile} \
@@ -63,6 +65,10 @@ pkgs.stdenvNoCC.mkDerivation {
       -Dicu_builtin=false \
       -Dexperimental_api=false \
       -Dragel_subproject=false \
+      -Draster=disabled \
+      -Dvector=disabled \
+      -Dgpu=disabled \
+      -Dutilities=disabled \
       -Dfuzzer_ldflags=
   '';
   buildPhase = ''
