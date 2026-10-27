@@ -68,6 +68,59 @@ jobs:
         run: |
           nix develop -c make XCODE_PATH=${XCODE_PATH} VERSION=${VERSION}
 
+      # The list hashes every regular file at the top of the store output, while
+      # the release uploads archives only. Today those two sets coincide; this
+      # step makes that a declared contract instead, so a new output type fails
+      # here rather than publishing a list row with no asset behind it.
+      # `-H` matters: `result` is a symlink, and find without it reports nothing
+      # and would let the assertion pass vacuously.
+      - name: Asserting the release membership
+        run: |
+          set -euo pipefail
+          extra=$(find -H result -maxdepth 1 -type f ! -name '*.zip' ! -name '*.tar.gz' | wc -l | tr -d '[:space:]')
+          if [ "$extra" != 0 ]; then
+            echo "ERROR: result/ holds $extra file(s) the release globs will not upload:" >&2
+            find -H result -maxdepth 1 -type f ! -name '*.zip' ! -name '*.tar.gz' >&2
+            exit 1
+          fi
+
+      # `result` is the flake out-link: a symlink into the read-only Nix store.
+      # Reading it is fine, writing the list into it is not, so the list is
+      # written to a fresh workspace directory while the hashes still come from
+      # the store paths that are about to be published.
+      - name: Generating SHA256SUMS
+        run: |
+          mkdir -p dist
+          bash .github/scripts/gen-sha256sums.sh gen result dist/SHA256SUMS.txt
+
+      # macOS has no GNU sha256sum here, so the row format has to be proved
+      # against the bytes this job is about to publish rather than assumed from
+      # a linux job: perl shasum must emit exactly the rows `shasum -c` reads
+      # back, LF-only, with a trailing newline and stable ordering.
+      - name: Asserting the list format
+        run: |
+          set -euo pipefail
+          if grep -qvE '^[0-9a-f]{64}  [A-Za-z0-9][A-Za-z0-9._+-]*$' dist/SHA256SUMS.txt; then
+            echo 'ERROR: a row is not "<64 lowercase hex><space><space><basename>"' >&2
+            grep -vnE '^[0-9a-f]{64}  [A-Za-z0-9][A-Za-z0-9._+-]*$' dist/SHA256SUMS.txt | head -5 >&2
+            exit 1
+          fi
+          if grep -q $'\r' dist/SHA256SUMS.txt; then
+            echo 'ERROR: the list must be LF-only' >&2
+            exit 1
+          fi
+          if [ "$(tail -c 1 dist/SHA256SUMS.txt | od -An -tx1 | tr -d ' \n')" != 0a ]; then
+            echo 'ERROR: the list must end with a newline' >&2
+            exit 1
+          fi
+          LC_ALL=C sort -c -k2 dist/SHA256SUMS.txt
+
+      # The asset count belongs to the target matrix, not to the version
+      # string, so it is stable across rebuilds: 120 zip + 36 tar.gz.
+      - name: Verifying SHA256SUMS
+        run: |
+          bash .github/scripts/gen-sha256sums.sh check result dist/SHA256SUMS.txt 156
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -84,3 +137,96 @@ jobs:
           files: |
             result/*.tar.gz
             result/*.zip
+            dist/SHA256SUMS.txt
+
+      # Nothing above proves that what GitHub published is what was hashed: the
+      # upload walks two globs while the list walks a directory, and 156 names
+      # are not something anyone compares by eye. This closes the loop against
+      # the release this run just created - a missing, extra or renamed asset
+      # fails the job instead of shipping a list that does not describe the page.
+      - name: Auditing published assets against the list
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          id=$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${TAG}" --jq .id)
+          gh api "repos/${GITHUB_REPOSITORY}/releases/${id}/assets?per_page=100" --paginate \
+            --jq '.[].name' | LC_ALL=C sort > published.txt
+          { awk '{print $2}' dist/SHA256SUMS.txt; echo SHA256SUMS.txt; } | LC_ALL=C sort > expected.txt
+          if ! cmp -s published.txt expected.txt; then
+            echo 'ERROR: the release page and the checksum list do not describe the same set:' >&2
+            diff -u expected.txt published.txt | head -20 >&2
+            exit 1
+          fi
+          printf 'audited %s published assets against the list\n' "$(wc -l < published.txt | tr -d '[:space:]')"
+
+  # Behaviour of the generator, asserted on fixtures in seconds. It runs on
+  # ubuntu because a second macOS job would queue behind the build for this
+  # repository's single hosted macOS slot and be cancelled before it ever got a
+  # runner; the assertions below are about the script, not about shasum. What
+  # only macOS can prove - the row format coming out of perl shasum over the
+  # real assets - is asserted inside the ci job.
+  checksums_selftest:
+    name: SHA256SUMS generator selftest (fixtures)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Generating, verifying and tamper-testing the list
+        run: |
+          set -euo pipefail
+          gen="bash .github/scripts/gen-sha256sums.sh gen selftest selftest/SHA256SUMS.txt"
+          check="bash .github/scripts/gen-sha256sums.sh check selftest selftest/SHA256SUMS.txt 3"
+
+          mkdir -p selftest/inner
+          for name in libmpv-libs_v0.0.0+1_macos-arm64-video-default.tar.gz libmpv-xcframeworks_v0.0.0+1_ios-universal-audio-full_Mpv.zip libmpv-libs_v0.0.0+1_iossimulator-amd64-audio-default.tar.gz; do
+            head -c 4096 /dev/urandom > "selftest/$name"
+          done
+
+          $gen
+
+          if grep -qvE '^[0-9a-f]{64}  [A-Za-z0-9][A-Za-z0-9._+-]*$' selftest/SHA256SUMS.txt; then
+            echo 'ERROR: a row is not "<64 lowercase hex><space><space><basename>"' >&2
+            cat selftest/SHA256SUMS.txt >&2
+            exit 1
+          fi
+          if grep -q $'\r' selftest/SHA256SUMS.txt; then
+            echo 'ERROR: the list must be LF-only' >&2
+            exit 1
+          fi
+          if [ "$(tail -c 1 selftest/SHA256SUMS.txt | od -An -tx1 | tr -d ' \n')" != 0a ]; then
+            echo 'ERROR: the list must end with a newline' >&2
+            exit 1
+          fi
+          if grep -q inner selftest/SHA256SUMS.txt; then
+            echo 'ERROR: a directory leaked into the list' >&2
+            exit 1
+          fi
+          LC_ALL=C sort -c -k2 selftest/SHA256SUMS.txt
+
+          $check
+
+          if bash .github/scripts/gen-sha256sums.sh check selftest selftest/SHA256SUMS.txt 4; then
+            echo 'ERROR: check accepted a wrong expected row count' >&2
+            exit 1
+          fi
+          if $gen; then
+            echo 'ERROR: gen must not overwrite an existing list' >&2
+            exit 1
+          fi
+          cp selftest/SHA256SUMS.txt first.txt
+          rm selftest/SHA256SUMS.txt
+          $gen
+          cmp first.txt selftest/SHA256SUMS.txt
+
+          tampered=$(mktemp -d)
+          cp -R selftest/. "$tampered/"
+          printf 'tampered\n' >> "$tampered/libmpv-libs_v0.0.0+1_macos-arm64-video-default.tar.gz"
+          if bash .github/scripts/gen-sha256sums.sh check "$tampered" "$tampered/SHA256SUMS.txt"; then
+            echo 'ERROR: a tampered asset passed verification' >&2
+            exit 1
+          fi
+          rm -rf "$tampered"
+
+          $check
