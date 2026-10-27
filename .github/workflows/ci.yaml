@@ -176,57 +176,74 @@ jobs:
       - name: Generating, verifying and tamper-testing the list
         run: |
           set -euo pipefail
-          gen="bash .github/scripts/gen-sha256sums.sh gen selftest selftest/SHA256SUMS.txt"
-          check="bash .github/scripts/gen-sha256sums.sh check selftest selftest/SHA256SUMS.txt 3"
+          script=.github/scripts/gen-sha256sums.sh
+          gen="bash $script gen selftest selftest/SHA256SUMS.txt"
 
           mkdir -p selftest/inner
           for name in libmpv-libs_v0.0.0+1_macos-arm64-video-default.tar.gz libmpv-xcframeworks_v0.0.0+1_ios-universal-audio-full_Mpv.zip libmpv-libs_v0.0.0+1_iossimulator-amd64-audio-default.tar.gz; do
             head -c 4096 /dev/urandom > "selftest/$name"
           done
 
+          echo 'case 1: generate the list from three fixture archives'
           $gen
 
           if grep -qvE '^[0-9a-f]{64}  [A-Za-z0-9][A-Za-z0-9._+-]*$' selftest/SHA256SUMS.txt; then
-            echo 'ERROR: a row is not "<64 lowercase hex><space><space><basename>"' >&2
+            echo 'case 1 FAILED: a row is not "<64 lowercase hex><space><space><basename>"' >&2
             cat selftest/SHA256SUMS.txt >&2
             exit 1
           fi
           if grep -q $'\r' selftest/SHA256SUMS.txt; then
-            echo 'ERROR: the list must be LF-only' >&2
+            echo 'case 1 FAILED: the list is not LF-only' >&2
             exit 1
           fi
           if [ "$(tail -c 1 selftest/SHA256SUMS.txt | od -An -tx1 | tr -d ' \n')" != 0a ]; then
-            echo 'ERROR: the list must end with a newline' >&2
+            echo 'case 1 FAILED: the list has no trailing newline' >&2
             exit 1
           fi
           if grep -q inner selftest/SHA256SUMS.txt; then
-            echo 'ERROR: a directory leaked into the list' >&2
+            echo 'case 1 FAILED: a directory leaked into the list' >&2
             exit 1
           fi
           LC_ALL=C sort -c -k2 selftest/SHA256SUMS.txt
+          echo 'case 1 passed: row format, LF-only, trailing newline, sorted by name, no directory rows'
 
-          $check
+          echo 'case 2: verifying the untouched fixtures must succeed'
+          bash $script check selftest selftest/SHA256SUMS.txt 3
+          echo 'case 2 passed'
 
-          if bash .github/scripts/gen-sha256sums.sh check selftest selftest/SHA256SUMS.txt 4; then
-            echo 'ERROR: check accepted a wrong expected row count' >&2
+          echo 'case 3: expected rejection - a wrong expected row count'
+          if out=$(bash $script check selftest selftest/SHA256SUMS.txt 4 2>&1); then
+            echo 'case 3 FAILED: check accepted a wrong expected row count' >&2
             exit 1
           fi
-          if $gen; then
-            echo 'ERROR: gen must not overwrite an existing list' >&2
+          printf 'case 3 rejected as designed: %s\n' "$out"
+
+          echo 'case 4: expected rejection - overwriting an existing list'
+          if out=$($gen 2>&1); then
+            echo 'case 4 FAILED: gen overwrote an existing list' >&2
             exit 1
           fi
+          printf 'case 4 rejected as designed: %s\n' "$out"
+
+          echo 'case 5: regenerating from the same bytes must give the same file'
           cp selftest/SHA256SUMS.txt first.txt
           rm selftest/SHA256SUMS.txt
           $gen
           cmp first.txt selftest/SHA256SUMS.txt
+          echo "case 5 passed: byte-identical on rerun"
 
+          echo 'case 6: expected rejection - a tampered archive (done on a copy so the'
+          echo '           fixture set and its list stay intact)'
           tampered=$(mktemp -d)
           cp -R selftest/. "$tampered/"
           printf 'tampered\n' >> "$tampered/libmpv-libs_v0.0.0+1_macos-arm64-video-default.tar.gz"
-          if bash .github/scripts/gen-sha256sums.sh check "$tampered" "$tampered/SHA256SUMS.txt"; then
-            echo 'ERROR: a tampered asset passed verification' >&2
+          if out=$(bash $script check "$tampered" "$tampered/SHA256SUMS.txt" 2>&1); then
+            echo 'case 6 FAILED: a tampered asset passed verification' >&2
             exit 1
           fi
           rm -rf "$tampered"
+          printf 'case 6 rejected as designed: %s\n' "$(printf '%s\n' "$out" | tr '\n' ' ')"
 
-          $check
+          echo 'case 7: the untouched fixtures still verify after all of the above'
+          bash $script check selftest selftest/SHA256SUMS.txt 3 >/dev/null
+          echo 'case 7 passed'
